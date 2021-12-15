@@ -2,10 +2,10 @@
   "name": "pollapp-node",
   "version": "1.0.0",
   "description": "Project scaffold for pollapp-node",
-  "main": "dist/pollapp-node.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "npm run build && node dist/pollapp-node.js",
-    "build": "node scripts/webpack.js",
+    "start": "npm run build && node .",
+    "build": "tsc",
     "build:analysis": "node scripts/webpack.js --analyze",
     "docs": "node scripts/typedoc.js",
     "lint": "node scripts/tslint-html-reporter.js",
