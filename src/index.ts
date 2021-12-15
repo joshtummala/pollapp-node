@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 import cors = require("cors");
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "https://determined-mclean-cdf2de.netlify.app");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -32,7 +32,7 @@ app.use(
   session({
     secret: SETTINGS.SESSION_SECRET,
     cookie: {},
-    // store,
+    store,
   })
 );
 
