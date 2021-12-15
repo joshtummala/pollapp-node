@@ -8,11 +8,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 import cors = require("cors");
-const corsConfig = {
-  credentials: true,
-  origin: "http://localhost:3000",
-};
-app.use(cors(corsConfig));
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 import session = require("express-session");
 import mongodb_session = require("connect-mongodb-session");
@@ -25,11 +31,7 @@ app.set("trust proxy", 1);
 app.use(
   session({
     secret: SETTINGS.SESSION_SECRET,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    },
-    saveUninitialized: true,
-    resave: false,
+    cookie: {},
     store,
   })
 );
