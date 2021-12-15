@@ -15,12 +15,22 @@ const corsConfig = {
 app.use(cors(corsConfig));
 
 import session = require("express-session");
+import mongodb_session = require("connect-mongodb-session");
+const MongoDBStore = mongodb_session(session);
+const store = new MongoDBStore({
+  uri: SETTINGS.MONGO_URL,
+  collection: "sessions",
+});
+
 app.use(
   session({
     secret: SETTINGS.SESSION_SECRET,
-    cookie: {},
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
     saveUninitialized: true,
-    resave: false,
+    resave: true,
+    store,
   })
 );
 
