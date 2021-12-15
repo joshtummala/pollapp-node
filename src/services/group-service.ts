@@ -15,7 +15,10 @@ const findGroupById = (req: any, res: any) =>
       }
       res.sendStatus(404);
     })
-    .catch((reason) => res.sendStatus(400));
+    .catch((reason) => {
+      console.error(reason);
+      res.sendStatus(400);
+    });
 const createGroup = (req: any, res: any) => {
   if (req.session.profile) {
     groupDao
@@ -25,7 +28,10 @@ const createGroup = (req: any, res: any) => {
         topic: req.body.topic,
       })
       .then((group) => res.json(group))
-      .catch((reason) => res.sendStatus(400));
+      .catch((reason) => {
+        console.log(reason);
+        res.sendStatus(400);
+      });
     return;
   }
   res.sendStatus(403);
@@ -37,7 +43,10 @@ const deleteGroup = (req: any, res: any) => {
       groupDao
         .deleteGroup(req.params.groupId)
         .then((status) => res.send(status))
-        .catch((reason) => res.sendStatus(400));
+        .catch((reason) => {
+          console.log(reason);
+          res.sendStatus(400);
+        });
       return;
     }
     res.sendStatus(403);
@@ -61,14 +70,20 @@ const updateGroup = (req: any, res: any) => {
         members: newMembers,
       })
       .then((group: any) => res.json(group))
-      .catch((reason) => res.sendStatus(400));
+      .catch((reason) => {
+        console.log(reason);
+        res.sendStatus(400);
+      });
   });
 };
 const searchGroups = (req: any, res: any) => {
   groupDao
     .findAllGroupsLike(req.query.title, req.query.topic)
     .then((groups) => res.json(groups))
-    .catch((reason) => res.sendStatus(400));
+    .catch((reason) => {
+      console.log(reason);
+      res.sendStatus(400);
+    });
 };
 
 export default (app: any) => {

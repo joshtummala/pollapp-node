@@ -21,7 +21,10 @@ const createQuestion = (req: any, res: any) => {
         options: req.body.options,
       })
       .then((question) => res.json(question))
-      .catch((reason) => res.sendStatus(400));
+      .catch((reason) => {
+        console.log(reason);
+        res.sendStatus(400);
+      });
     return;
   }
   res.sendStatus(403);
@@ -36,7 +39,10 @@ const deleteQuestion = (req: any, res: any) => {
         questionDao
           .deleteQuestion(req.params.questionId)
           .then((status) => res.send(status))
-          .catch((reason) => res.sendStatus(400));
+          .catch((reason) => {
+            console.log(reason);
+            res.sendStatus(400);
+          });
         return;
       }
       res.sendStatus(403);
@@ -49,7 +55,10 @@ const searchQuestions = (req: any, res: any) => {
   questionDao
     .findAllQuestionsLike(req.query.question, req.query.group, req.query.owner)
     .then((questions) => res.json(questions))
-    .catch((reason) => res.sendStatus(400));
+    .catch((reason) => {
+      console.log(reason);
+      res.sendStatus(400);
+    });
 };
 const updateQuestion = (req: any, res: any) => {
   if (req.session.profile) {
