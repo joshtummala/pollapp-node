@@ -6,14 +6,8 @@
   "scripts": {
     "start": "npm run build && node .",
     "build": "tsc",
-    "build:analysis": "node scripts/webpack.js --analyze",
     "docs": "node scripts/typedoc.js",
-    "lint": "node scripts/tslint-html-reporter.js",
-    "jscpd": "node scripts/jscpd-html-reporter.js",
-    "mocha": "nyc node scripts/mocha.js",
-    "karma": "node scripts/karma.js",
-    "jest": "node scripts/jest.js",
-    "test": "npm run jest"
+    "lint": "node scripts/tslint-html-reporter.js"
   },
   "author": "author",
   "license": "ISC",
@@ -34,8 +28,6 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
-    "@types/jest": "^27.0.1",
-    "@types/mocha": "^7.0.2",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^14.0.13",
     "@types/sinon": "^9.0.4",
