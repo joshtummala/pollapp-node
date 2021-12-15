@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run build && node .",
+    "tsc": "tsc",
     "build": "tsc",
     "docs": "node scripts/typedoc.js",
     "lint": "node scripts/tslint-html-reporter.js"
