@@ -33,8 +33,9 @@ const createGroup = (req: any, res: any) => {
         res.sendStatus(400);
       });
     return;
+  } else {
+    res.sendStatus(401);
   }
-  res.sendStatus(403);
 };
 const deleteGroup = (req: any, res: any) => {
   groupDao.findGroupById(req.params.groupId).then((group) => {
