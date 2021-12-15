@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 import cors = require("cors");
 const corsConfig = {
   credentials: true,
-  origin: true,
+  origin: "http://localhost:3000",
 };
 app.use(cors(corsConfig));
 
@@ -29,7 +29,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     },
     saveUninitialized: true,
-    resave: true,
+    resave: false,
     store,
   })
 );
