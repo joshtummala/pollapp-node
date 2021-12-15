@@ -30,6 +30,24 @@ groupService(app);
 import questionService from "./services/question-service";
 questionService(app);
 
+app.use(
+  (
+    err: { status: any; message: any },
+    req: any,
+    res: {
+      status: (arg0: any) => void;
+      render: (arg0: string, arg1: { message: any; error: {} }) => void;
+    },
+    next: any
+  ) => {
+    res.status(err.status || 500);
+    res.render("error", {
+      message: err.message,
+      error: {},
+    });
+  }
+);
+
 app.listen(SETTINGS.PORT, () => {
   console.log(`Server is running on port ${SETTINGS.PORT}`);
 });

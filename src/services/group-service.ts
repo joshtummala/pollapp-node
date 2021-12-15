@@ -6,13 +6,16 @@ const verifyAdminOrOwner = (req: any, group: any) =>
   verifyAdmin(req) ||
   (req.session.profile && group.owner_id === req.session.profile._id);
 const findGroupById = (req: any, res: any) =>
-  groupDao.findGroupById(req.params.groupId).then((group) => {
-    if (group) {
-      res.json(group);
-      return;
-    }
-    res.sendStatus(404);
-  });
+  groupDao
+    .findGroupById(req.params.groupId)
+    .then((group) => {
+      if (group) {
+        res.json(group);
+        return;
+      }
+      res.sendStatus(404);
+    })
+    .catch((reason) => res.sendStatus(400));
 const createGroup = (req: any, res: any) => {
   if (req.session.profile) {
     groupDao
@@ -21,7 +24,8 @@ const createGroup = (req: any, res: any) => {
         title: req.body.title,
         topic: req.body.topic,
       })
-      .then((group) => res.json(group));
+      .then((group) => res.json(group))
+      .catch((reason) => res.sendStatus(400));
     return;
   }
   res.sendStatus(403);
@@ -29,7 +33,11 @@ const createGroup = (req: any, res: any) => {
 const deleteGroup = (req: any, res: any) => {
   groupDao.findGroupById(req.params.groupId).then((group) => {
     if (verifyAdminOrOwner(req, group)) {
-      groupDao.deleteGroup(req.params.groupId);
+      console.log(group);
+      groupDao
+        .deleteGroup(req.params.groupId)
+        .then((status) => res.send(status))
+        .catch((reason) => res.sendStatus(400));
       return;
     }
     res.sendStatus(403);
@@ -37,29 +45,30 @@ const deleteGroup = (req: any, res: any) => {
 };
 const updateGroup = (req: any, res: any) => {
   groupDao.findGroupById(req.params.groupId).then((group) => {
-    if (verifyAdminOrOwner(req, group)) {
-      req.body.add_members &&
-        groupDao.addGroupMembers(req.params.groupId, req.body.add_members);
-      req.body.remove_members &&
-        groupDao.removeGroupMembers(
-          req.params.groupId,
-          req.body.remove_members
-        );
-      groupDao
-        .updateGroup(req.params.groupId, {
-          title: req.body.title || group.title,
-          topic: req.body.topic || group.topic,
-        })
-        .then((group) => res.json(group));
-      return;
+    let newMembers = group.members;
+    if (req.body.remove_members) {
+      newMembers = newMembers.filter(
+        (member: string) => member in req.body.remove_members
+      );
     }
-    res.sendStatus(403);
+    if (req.body.add_members) {
+      newMembers.push(...req.body.add_members);
+    }
+    groupDao
+      .updateGroup(req.params.groupId, {
+        title: req.body.title || group.title,
+        topic: req.body.topic || group.topic,
+        members: newMembers,
+      })
+      .then((group: any) => res.json(group))
+      .catch((reason) => res.sendStatus(400));
   });
 };
 const searchGroups = (req: any, res: any) => {
   groupDao
     .findAllGroupsLike(req.query.title, req.query.topic)
-    .then((groups) => res.json(groups));
+    .then((groups) => res.json(groups))
+    .catch((reason) => res.sendStatus(400));
 };
 
 export default (app: any) => {

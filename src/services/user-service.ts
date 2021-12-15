@@ -8,28 +8,34 @@ const verifyAdminOrOwner = (req: any) =>
   verifyAdmin(req) ||
   (req.session.profile && req.params.userId === req.session.profile._id);
 const findAllUsers = (req: any, res: any) => {
-  if (verifyAdmin(req) || true) {
+  if (verifyAdmin(req)) {
     userDao.findAllUsers().then((users) => res.json(users));
     return;
   }
   res.sendStatus(403);
 };
 const findUserById = (req: any, res: any) => {
-  userDao.findUserById(req.params.userId).then((user) => {
-    if (user) {
-      res.json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-      });
-      return;
-    }
-    res.sendStatus(404);
-  });
+  userDao
+    .findUserById(req.params.userId)
+    .then((user) => {
+      if (user) {
+        res.json({
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+        });
+        return;
+      }
+      res.sendStatus(404);
+    })
+    .catch((reason) => res.sendStatus(400));
 };
 const deleteUser = (req: any, res: any) => {
   if (verifyAdminOrOwner(req)) {
-    userDao.deleteUser(req.params.userId).then((status) => res.send(status));
+    userDao
+      .deleteUser(req.params.userId)
+      .then((status) => res.send(status))
+      .catch((reason) => res.sendStatus(400));
     return;
   }
   res.sendStatus(403);
@@ -38,25 +44,29 @@ const updateUser = (req: any, res: any) => {
   if (verifyAdminOrOwner(req)) {
     userDao
       .updateUser(req.params.userId, req.body)
-      .then((status) => res.send(status));
+      .then((status) => res.send(status))
+      .catch((reason) => res.sendStatus(400));
     return;
   }
   res.sendStatus(403);
 };
 const login = (req: any, res: any) => {
-  userDao.findByUsername(req.body.username).then((user) => {
-    if (user) {
-      bcrypt.compare(req.body.password, user.password, (err, same) => {
-        if (same) {
-          req.session.profile = user;
-          res.json(user);
-          return;
-        }
-      });
-    } else {
-      res.sendStatus(403);
-    }
-  });
+  userDao
+    .findByUsername(req.body.username)
+    .then((user) => {
+      if (user) {
+        bcrypt.compare(req.body.password, user.password, (err, same) => {
+          if (same) {
+            req.session.profile = user;
+            res.json(user);
+            return;
+          }
+        });
+      } else {
+        res.sendStatus(403);
+      }
+    })
+    .catch((reason) => res.sendStatus(400));
 };
 const register = (req: any, res: any) => {
   userDao.findByUsername(req.body.username).then((user) => {
@@ -71,10 +81,13 @@ const register = (req: any, res: any) => {
       }
       bcrypt.hash(req.body.password, SETTINGS.SALT_ROUNDS, (err, hash) => {
         req.body.password = hash;
-        userDao.createUser(req.body).then((user) => {
-          req.session.profile = user;
-          res.json(user);
-        });
+        userDao
+          .createUser(req.body)
+          .then((user) => {
+            req.session.profile = user;
+            res.json(user);
+          })
+          .catch((reason) => res.sendStatus(400));
       });
     });
   });

@@ -12,7 +12,19 @@ const findQuestionById = (req: any, res: any) => {
   });
 };
 const createQuestion = (req: any, res: any) => {
-  questionDao.createQuestion(req.body).then((question) => res.json(question));
+  if (req.session.profile) {
+    questionDao
+      .createQuestion({
+        owner_id: req.session.profile._id,
+        group_id: req.body.group_id,
+        question: req.body.question,
+        options: req.body.options,
+      })
+      .then((question) => res.json(question))
+      .catch((reason) => res.sendStatus(400));
+    return;
+  }
+  res.sendStatus(403);
 };
 const deleteQuestion = (req: any, res: any) => {
   questionDao.findQuestionById(req.params.questionId).then((question) => {
@@ -23,7 +35,8 @@ const deleteQuestion = (req: any, res: any) => {
       ) {
         questionDao
           .deleteQuestion(req.params.questionId)
-          .then((status) => res.send(status));
+          .then((status) => res.send(status))
+          .catch((reason) => res.sendStatus(400));
         return;
       }
       res.sendStatus(403);
@@ -34,13 +47,14 @@ const deleteQuestion = (req: any, res: any) => {
 };
 const searchQuestions = (req: any, res: any) => {
   questionDao
-    .findAllQuestionsLike(req.query.question)
-    .then((questions) => res.json(questions));
+    .findAllQuestionsLike(req.query.question, req.query.group, req.query.owner)
+    .then((questions) => res.json(questions))
+    .catch((reason) => res.sendStatus(400));
 };
 
 export default (app: any) => {
   app.get("/api/question/:questionId", findQuestionById);
   app.post("/api/question", createQuestion);
   app.delete("/api/question/:questionId", deleteQuestion);
-  app.get("/api/question/search", searchQuestions);
+  app.get("/api/questions/search", searchQuestions);
 };
