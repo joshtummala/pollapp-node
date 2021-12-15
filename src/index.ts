@@ -21,7 +21,7 @@ const store = new MongoDBStore({
   uri: SETTINGS.MONGO_URL,
   collection: "sessions",
 });
-
+app.set("trust proxy", 1);
 app.use(
   session({
     secret: SETTINGS.SESSION_SECRET,
