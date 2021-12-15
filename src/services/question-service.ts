@@ -51,10 +51,26 @@ const searchQuestions = (req: any, res: any) => {
     .then((questions) => res.json(questions))
     .catch((reason) => res.sendStatus(400));
 };
+const updateQuestion = (req: any, res: any) => {
+  if (req.session.profile) {
+    questionDao.findQuestionById(req.params.questionId).then((question) => {
+      if (question) {
+        question.responses.set(req.session.profile._id, req.body.response);
+        question.save();
+        res.json(question);
+      } else {
+        res.sendStatus(404);
+      }
+    });
+  } else {
+    res.sendStatus(403);
+  }
+};
 
 export default (app: any) => {
   app.get("/api/question/:questionId", findQuestionById);
   app.post("/api/question", createQuestion);
   app.delete("/api/question/:questionId", deleteQuestion);
   app.get("/api/questions/search", searchQuestions);
+  app.put("/api/question/:questionId", updateQuestion);
 };

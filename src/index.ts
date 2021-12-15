@@ -22,7 +22,6 @@ app.use(
 
 
 import mongoose = require("mongoose");
-console.log(`Connecting to mongodb at ${SETTINGS.MONGO_URL}`)
 mongoose.connect(SETTINGS.MONGO_URL).then(() => console.log(`Connected to mongodb at ${SETTINGS.MONGO_URL}`));
 
 import userService from "./services/user-service";

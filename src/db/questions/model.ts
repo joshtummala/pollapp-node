@@ -15,7 +15,6 @@ const QuestionSchema = new Schema({
   },
   responses: {
     type: Map,
-    of: String,
     required: true,
     default: {},
   },
