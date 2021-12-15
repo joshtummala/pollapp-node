@@ -8,7 +8,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 import cors = require("cors");
-app.use(cors());
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 
 import session = require("express-session");
 app.use(
@@ -20,9 +24,10 @@ app.use(
   })
 );
 
-
 import mongoose = require("mongoose");
-mongoose.connect(SETTINGS.MONGO_URL).then(() => console.log(`Connected to mongodb at ${SETTINGS.MONGO_URL}`));
+mongoose
+  .connect(SETTINGS.MONGO_URL)
+  .then(() => console.log(`Connected to mongodb at ${SETTINGS.MONGO_URL}`));
 
 import userService from "./services/user-service";
 userService(app);

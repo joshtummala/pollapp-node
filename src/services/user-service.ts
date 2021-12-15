@@ -66,7 +66,10 @@ const login = (req: any, res: any) => {
         res.sendStatus(403);
       }
     })
-    .catch((reason) => res.sendStatus(400));
+    .catch((reason) => {
+      console.log(reason);
+      res.sendStatus(400);
+    });
 };
 const register = (req: any, res: any) => {
   userDao.findByUsername(req.body.username).then((user) => {
@@ -87,7 +90,10 @@ const register = (req: any, res: any) => {
             req.session.profile = user;
             res.json(user);
           })
-          .catch((reason) => res.sendStatus(400));
+          .catch((reason) => {
+            console.log(reason);
+            res.sendStatus(400);
+          });
       });
     });
   });
