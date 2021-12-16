@@ -34,7 +34,7 @@ const deleteQuestion = (req: any, res: any) => {
     if (question) {
       if (
         verifyAdmin(req) ||
-        (req.session.profile && req.session.profile._id === question.owner_id)
+        (req.session.profile && req.session.profile._id.toString() === question.owner_id.toString())
       ) {
         questionDao
           .deleteQuestion(req.params.questionId)

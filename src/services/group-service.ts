@@ -4,7 +4,7 @@ const verifyAdmin = (req: any) =>
   req.session.profile && req.session.profile.role === "ADMIN";
 const verifyAdminOrOwner = (req: any, group: any) =>
   verifyAdmin(req) ||
-  (req.session.profile && group.owner_id === req.session.profile._id);
+  (req.session.profile && group.owner_id.toString() === req.session.profile._id.toString());
 const findGroupById = (req: any, res: any) =>
   groupDao
     .findGroupById(req.params.groupId)

@@ -6,13 +6,13 @@ const verifyAdmin = (req: any) =>
   req.session.profile && req.session.profile.role === "ADMIN";
 const verifyAdminOrOwner = (req: any) =>
   verifyAdmin(req) ||
-  (req.session.profile && req.params.userId === req.session.profile._id);
+  (req.session.profile && req.params.userId === req.session.profile._id.toString());
 const findAllUsers = (req: any, res: any) => {
   if (verifyAdmin(req)) {
     userDao.findAllUsers().then((users) => res.json(users));
     return;
   }
-  res.sendStatus(403);
+  res.sendStatus(401);
 };
 const findUserById = (req: any, res: any) => {
   userDao
@@ -39,9 +39,9 @@ const deleteUser = (req: any, res: any) => {
       .deleteUser(req.params.userId)
       .then((status) => res.send(status))
       .catch((reason) => res.sendStatus(400));
-    return;
+  } else {
+    res.sendStatus(401);
   }
-  res.sendStatus(403);
 };
 const updateUser = (req: any, res: any) => {
   if (verifyAdminOrOwner(req)) {
@@ -52,9 +52,9 @@ const updateUser = (req: any, res: any) => {
         console.log(reason);
         res.sendStatus(400);
       });
-    return;
+  } else {
+    res.sendStatus(401);
   }
-  res.sendStatus(403);
 };
 const login = (req: any, res: any) => {
   userDao
