@@ -31,7 +31,10 @@ app.set("trust proxy", 1);
 app.use(
   session({
     secret: SETTINGS.SESSION_SECRET,
-    cookie: {},
+    cookie: {
+      httpOnly: false,
+      secure: false,
+    },
     store,
   })
 );
