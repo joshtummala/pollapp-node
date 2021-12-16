@@ -28,7 +28,10 @@ const findUserById = (req: any, res: any) => {
       }
       res.sendStatus(404);
     })
-    .catch((reason) => res.sendStatus(400));
+    .catch((reason) => {
+      console.log(reason);
+      res.sendStatus(400);
+    });
 };
 const deleteUser = (req: any, res: any) => {
   if (verifyAdminOrOwner(req)) {
@@ -45,7 +48,10 @@ const updateUser = (req: any, res: any) => {
     userDao
       .updateUser(req.params.userId, req.body)
       .then((status) => res.send(status))
-      .catch((reason) => res.sendStatus(400));
+      .catch((reason) => {
+        console.log(reason);
+        res.sendStatus(400);
+      });
     return;
   }
   res.sendStatus(403);
