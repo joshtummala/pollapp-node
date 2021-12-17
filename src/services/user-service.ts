@@ -69,7 +69,7 @@ const login = (req: any, res: any) => {
           }
         });
       } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
       }
     })
     .catch((reason) => {
