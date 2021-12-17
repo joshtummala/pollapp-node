@@ -32,7 +32,7 @@ app.use(
       httpOnly: true,
     },
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store,
   })
 );
