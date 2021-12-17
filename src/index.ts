@@ -39,11 +39,11 @@ app.use(
     secret: SETTINGS.SESSION_SECRET,
     cookie: {
       sameSite: "none",
-      // secure: false,
+      secure: false,
       httpOnly: true,
     },
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store,
   })
 );
