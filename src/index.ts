@@ -39,7 +39,7 @@ app.use(
     secret: SETTINGS.SESSION_SECRET,
     cookie: {
       sameSite: "none",
-      secure: true,
+      secure: false,
       httpOnly: true,
     },
     proxy: true,
