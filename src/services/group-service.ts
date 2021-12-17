@@ -11,9 +11,9 @@ const findGroupById = (req: any, res: any) =>
     .then((group) => {
       if (group) {
         res.json(group);
-        return;
+      } else {
+        res.sendStatus(404);
       }
-      res.sendStatus(404);
     })
     .catch((reason) => {
       console.error(reason);
