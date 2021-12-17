@@ -31,8 +31,6 @@ app.use(
       secure: false,
       httpOnly: true,
     },
-    resave: true,
-    saveUninitialized: true,
     store,
   })
 );
