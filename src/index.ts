@@ -36,6 +36,9 @@ app.use(
       secure: true,
       httpOnly: true,
     },
+    proxy: true,
+    resave: false,
+    saveUninitialized: false,
     store,
   })
 );
