@@ -10,9 +10,9 @@ const verifyAdminOrOwner = (req: any) =>
 const findAllUsers = (req: any, res: any) => {
   if (verifyAdmin(req)) {
     userDao.findAllUsers().then((users) => res.json(users));
-    return;
-  }
-  res.sendStatus(401);
+  } else {
+    res.sendStatus(401)
+  };
 };
 const findUserById = (req: any, res: any) => {
   userDao
@@ -24,9 +24,9 @@ const findUserById = (req: any, res: any) => {
           username: user.username,
           email: user.email,
         });
-        return;
+      } else {
+        res.sendStatus(404);
       }
-      res.sendStatus(404);
     })
     .catch((reason) => {
       console.log(reason);
